@@ -89,6 +89,20 @@ const Login = () => {
    }
   };
 
+  const handleRoleDashboard = (role, dashboardPath) => {
+    const user = {
+      id: `demo-${role}`,
+      name: `${role.charAt(0).toUpperCase()}${role.slice(1)} Demo`,
+      email: `${role}@demo.booksmart.local`,
+      role
+    };
+
+    sessionStorage.setItem('token', 'demo-token');
+    sessionStorage.setItem('user', JSON.stringify(user));
+    window.dispatchEvent(new Event('userStatusChanged'));
+    navigate(dashboardPath);
+  };
+
  return (
    <div className="d-flex align-items-center justify-content-center bg-light"
    style={{
@@ -198,7 +212,34 @@ const Login = () => {
         </button>
        </form>
 
-       <div className="text-center mt-2">
+       <div className="mt-4 pt-3 border-top">
+        <p className="text-center text-muted small mb-2">Open a demo dashboard</p>
+        <div className="d-grid gap-2">
+         <button
+          type="button"
+          className="btn btn-outline-primary"
+          onClick={() => handleRoleDashboard('customer', '/customer-dashboard')}
+         >
+          Customer Dashboard
+         </button>
+         <button
+          type="button"
+          className="btn btn-outline-success"
+          onClick={() => handleRoleDashboard('hotel', '/hotel-dashboard')}
+         >
+          Hotel Dashboard
+         </button>
+         <button
+          type="button"
+          className="btn btn-outline-dark"
+          onClick={() => handleRoleDashboard('admin', '/admin-dashboard')}
+         >
+          Admin Dashboard
+         </button>
+        </div>
+       </div>
+
+        <div className="text-center mt-2">
         <p className="text-muted mb-0 small">
          Don't have an account?{' '}
           <Link to="/signup" className="fw-semibold" style={{color: '#FF5A5F', textDecoration: 'underline'}}>

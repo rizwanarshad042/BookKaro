@@ -61,7 +61,18 @@ const writeJson = (key, value) => localStorage.setItem(key, JSON.stringify(value
 
 export const getMockHotels = () => readJson('booksmart_hotels', demoHotels);
 
-export const getMockUser = () => readJson('booksmart_user', null);
+export const getMockUser = () => {
+  const sessionUser = sessionStorage.getItem('user');
+  if (sessionUser) {
+    try {
+      return JSON.parse(sessionUser);
+    } catch {
+      return null;
+    }
+  }
+
+  return readJson('booksmart_user', null);
+};
 
 export const getMockFavorites = () => readJson('booksmart_favorites', []);
 
@@ -175,7 +186,22 @@ export const mockRequest = async (method, rawUrl, body = {}) => {
   }
 
   if (normalizedMethod === 'GET' && url.startsWith('/admin/')) {
-    return { success: true, hotels: getMockHotels(), users: [], bookings: [], refunds: [], reviews: [], stats: {} };
+    const hotels = getMockHotels();
+    return {
+      success: true,
+      hotels,
+      users: [],
+      bookings: [],
+      refunds: [],
+      reviews: [],
+      stats: {
+        users: { total: 0, suspended: 0 },
+        hotels: { total: hotels.length, pending: 0, approved: hotels.length, suspended: 0, lowRated: 0 },
+        bookings: { total: getMockBookings().length, active: getMockBookings().filter((booking) => booking.status === 'confirmed').length },
+        financial: { totalRevenue: 0, monthlyRevenue: 0, totalCommission: 0 },
+        support: { pendingRefunds: 0 }
+      }
+    };
   }
 
   return { success: true, data: {} };
