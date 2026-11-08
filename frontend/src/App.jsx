@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import Navbar from './components/Navbar';
@@ -19,13 +19,6 @@ import BookingHistory from './components/BookingHistory';
 import LeaveReview from './components/LeaveReview';
 import RescheduleBooking from './components/RescheduleBooking';
 import EditProfile from './components/EditProfile';
-import ManageHotelProfile from './components/ManageHotelProfile';
-import ManageCoupons from './components/ManageCoupons';
-import OwnerBookingManagement from './components/OwnerBookingManagement';
-import ReplyToReviews from './components/ReplyToReviews';
-import EarningsDashboard from './components/EarningsDashboard';
-import AboutUs from './components/AboutUs';
-import Contact from './components/Contact';
 import './App.css';
 
 function AppContent() {
@@ -100,8 +93,6 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<Contact />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
 
@@ -229,6 +220,7 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );

@@ -66,9 +66,6 @@ const HomePage = () => {
                                 <Link to="/browse-hotels" className="hp-btn-primary">
                                     Browse Hotels →
                                 </Link>
-                                <Link to="/about" className="hp-btn-outline">
-                                    Learn About Us
-                                </Link>
                             </div>
 
                             {/* Trust bar */}
@@ -206,13 +203,6 @@ const HomePage = () => {
                             style={{ background: '#1e5bb8', color: '#fff', borderRadius: '50px', fontSize: '1rem', border: 'none' }}
                         >
                             Browse Hotels
-                        </Link>
-                        <Link
-                            to="/about"
-                            className="btn fw-bold px-5 py-3"
-                            style={{ background: 'transparent', color: '#1e5bb8', border: '2px solid #1e5bb8', borderRadius: '50px', fontSize: '1rem' }}
-                        >
-                            Our Story
                         </Link>
                     </div>
                 </div>
