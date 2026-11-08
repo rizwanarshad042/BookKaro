@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
 import App from './App.jsx'
 import { resolveApiRequestUrl } from './services/urlResolver'
+import { mockRequest } from './data/mockData'
 
 axios.interceptors.request.use((config) => {
   if (typeof config.url === 'string') {
@@ -17,21 +18,36 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
+axios.defaults.adapter = async (config) => {
+  const data = typeof config.data === 'string' ? JSON.parse(config.data || '{}') : (config.data || {});
+  const responseData = await mockRequest(config.method || 'get', config.url || '/', data);
+  return {
+    data: config.responseType === 'blob' ? new Blob([JSON.stringify(responseData)], { type: 'application/json' }) : responseData,
+    status: 200,
+    statusText: 'OK',
+    headers: { 'content-type': 'application/json' },
+    config,
+    request: {}
+  };
+};
+
 const originalFetch = window.fetch.bind(window);
-window.fetch = (input, init) => {
-  if (typeof input === 'string') {
-    return originalFetch(resolveApiRequestUrl(input), init);
+window.fetch = async (input, init) => {
+  const requestUrl = typeof input === 'string' ? input : input.url;
+  const normalizedUrl = resolveApiRequestUrl(requestUrl);
+
+  if (normalizedUrl.includes('/api/')) {
+    const method = init?.method || (typeof input === 'object' ? input.method : 'GET');
+    const requestBody = init?.body || (typeof input === 'object' ? await input.clone().text() : '{}');
+    const body = typeof requestBody === 'string' ? JSON.parse(requestBody || '{}') : {};
+    const data = await mockRequest(method, normalizedUrl, body);
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
-  if (input instanceof Request) {
-    const normalizedUrl = resolveApiRequestUrl(input.url);
-    if (normalizedUrl !== input.url) {
-      const rewrittenRequest = new Request(normalizedUrl, input);
-      return originalFetch(rewrittenRequest, init);
-    }
-  }
-
-  return originalFetch(input, init);
+  return originalFetch(normalizedUrl, init);
 };
 
 createRoot(document.getElementById('root')).render(
