@@ -18,7 +18,7 @@ const OwnerBookingManagement = () => {
    try {
      setLoading(true);
     const token = sessionStorage.getItem('token');
-
+    
     const response = await axios.get('/api/owner/bookings', {
      headers: { Authorization: `Bearer ${token}` }
     });
@@ -109,8 +109,8 @@ const OwnerBookingManagement = () => {
    }
   };
 
- const filteredBookings = filter === 'all'
-   ? bookings
+ const filteredBookings = filter === 'all' 
+   ? bookings 
     : bookings.filter(b => b.status === filter);
 
   if (loading) {
@@ -125,7 +125,7 @@ const OwnerBookingManagement = () => {
        <h1>Booking Management</h1>
         <p>Manage your hotel bookings</p>
       </div>
-      <button
+      <button 
        className="btn btn-outline-secondary"
         onClick={() => navigate('/hotel-dashboard')}
       style={{ height: 'fit-content' }}
@@ -253,3 +253,4 @@ const getStatusColor = (status) => {
 };
 
 export default OwnerBookingManagement;
+

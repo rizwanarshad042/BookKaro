@@ -27,7 +27,7 @@ const HotelDashboard = () => {
   useEffect(() => {
    const path = location.pathname;
     const normalizedPath = path.endsWith('/') ? path.slice(0, -1) : path;
-
+    
    if (normalizedPath === '/hotel-dashboard' || normalizedPath === '/') {
      setActiveSection('home');
     } else if (normalizedPath === '/manage-hotel-profile') {
@@ -46,7 +46,7 @@ const HotelDashboard = () => {
  useEffect(() => {
    const token = sessionStorage.getItem('token');
     const userData = sessionStorage.getItem('user');
-
+    
    if (!token || !userData) {
      navigate('/login');
       return;
@@ -81,13 +81,13 @@ const HotelDashboard = () => {
   const fetchDashboardStats = async () => {
    try {
      setLoading(true);
-
+     
      const token = sessionStorage.getItem('token');
     if (!token) {
      navigate('/login');
       return;
     }
-
+    
     const hotelsResponse = await HotelApiService.getOwnerHotels();
 
      const bookingsResponse = await axios.get('/api/owner/bookings', {
@@ -99,7 +99,7 @@ const HotelDashboard = () => {
      const earningsResponse = await axios.get('/api/earnings/dashboard?period=month', {
       headers: { Authorization: `Bearer ${token}` }
      });
-
+    
     if (earningsResponse.data.success && earningsResponse.data.earnings) {
      earningsData = {
       total: parseFloat(earningsResponse.data.earnings.totalEarnings || 0),
@@ -113,7 +113,7 @@ const HotelDashboard = () => {
     if (hotelsResponse.success && bookingsResponse.data.success) {
      const hotels = hotelsResponse.hotels || [];
       const bookings = bookingsResponse.data.bookings || [];
-
+    
     const activeHotels = hotels.filter(h => h.isApproved && !h.isSuspended);
      const pendingHotels = hotels.filter(h => !h.isApproved && !h.isSuspended);
     const activeBookings = bookings.filter(b => b.status === 'confirmed' || b.status === 'active');
@@ -227,37 +227,37 @@ const HotelDashboard = () => {
 
  <div className={`owner-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
   <nav className="owner-nav">
-   <button
+   <button 
     className={activeSection === 'home' ? 'active' : ''}
      onClick={() => changeSection('home')}
   >
   🏠 Home
  </button>
- <button
+ <button 
   className={activeSection === 'properties' ? 'active' : ''}
    onClick={() => changeSection('properties')}
 >
 🏨 My Properties
 </button>
-<button
+<button 
  className={activeSection === 'coupons' ? 'active' : ''}
   onClick={() => changeSection('coupons')}
 >
 🎫 Coupons
 </button>
-<button
+<button 
  className={activeSection === 'bookings' ? 'active' : ''}
   onClick={() => changeSection('bookings')}
 >
 📋 Reservations
 </button>
-<button
+<button 
  className={activeSection === 'reviews' ? 'active' : ''}
   onClick={() => changeSection('reviews')}
 >
 ⭐ Reviews
 </button>
-<button
+<button 
  className={activeSection === 'earnings' ? 'active' : ''}
   onClick={() => changeSection('earnings')}
 >

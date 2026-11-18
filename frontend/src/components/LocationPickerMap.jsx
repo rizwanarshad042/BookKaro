@@ -54,8 +54,8 @@ const LocationPickerMap = ({ onLocationSelect, initialLat = null, initialLng = n
 
   useEffect(() => {
    if (initialLat !== null && initialLng !== null && !isNaN(initialLat) && !isNaN(initialLng)) {
-    if (!markerPosition ||
-        Math.abs(markerPosition[0] - initialLat) > 0.0001 ||
+    if (!markerPosition || 
+        Math.abs(markerPosition[0] - initialLat) > 0.0001 || 
          Math.abs(markerPosition[1] - initialLng) > 0.0001) {
      setMarkerPosition([initialLat, initialLng]);
     }
@@ -66,9 +66,9 @@ const LocationPickerMap = ({ onLocationSelect, initialLat = null, initialLng = n
    if (addressToGeocode && addressToGeocode.trim().length >= 3) {
     const trimmedAddress = addressToGeocode.trim();
      const lastAddress = lastGeocodedAddress.current.trim();
-
+    
     const addressChanged = trimmedAddress !== lastAddress && trimmedAddress.length > 0;
-
+    
     if (addressChanged) {
      setIsGeocoding(true);
       const geocodeAddress = async () => {
@@ -83,16 +83,16 @@ const LocationPickerMap = ({ onLocationSelect, initialLat = null, initialLng = n
         const lat = parseFloat(results[0].lat);
          const lng = parseFloat(results[0].lon);
         const position = [lat, lng];
-
+        
         console.log('Geocoding result:', { lat, lng, address: results[0].display_name });
-
+        
         // Always update marker position when geocoding succeeds (overrides manual selection)
         setMarkerPosition(position);
          lastGeocodedAddress.current = trimmedAddress;
-
+        
         // Force map view update
         setMapUpdateKey(prev => prev + 1);
-
+        
         if (onLocationSelect) {
          onLocationSelect(lat, lng);
         }
@@ -106,7 +106,7 @@ const LocationPickerMap = ({ onLocationSelect, initialLat = null, initialLng = n
        setIsGeocoding(false);
       }
      };
-
+    
     // Reduced debounce time for better responsiveness (400ms)
      const timeoutId = setTimeout(geocodeAddress, 400);
     return () => {
@@ -133,7 +133,7 @@ const LocationPickerMap = ({ onLocationSelect, initialLat = null, initialLng = n
 
   // Map center - use marker position if set, otherwise default to world view
  const mapCenter = markerPosition || [20, 0];
-
+  
   // Map zoom - zoom in if marker exists, otherwise world view
  const mapZoom = markerPosition ? 15 : 2;
 
@@ -150,10 +150,10 @@ const LocationPickerMap = ({ onLocationSelect, initialLat = null, initialLng = n
 
  return (
    <div style={{ position: 'relative', width: '100%' }}>
-    <div style={{
-     height: height,
-      width: '100%',
-     border: '1px solid #e0e0e0',
+    <div style={{ 
+     height: height, 
+      width: '100%', 
+     border: '1px solid #e0e0e0', 
       borderRadius: '8px',
      overflow: 'hidden',
       zIndex: 0

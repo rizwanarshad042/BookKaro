@@ -74,14 +74,14 @@ const ManageCoupons = () => {
 
  const handleSubmit = async (e) => {
    e.preventDefault();
-
+    
    const hotelId = formData.hotelId || selectedHotel;
-
+    
    if (!hotelId) {
      toast.warning('Please select a hotel');
       return;
     }
-
+    
    if (!formData.code || !formData.discountPercentage || !formData.validFrom || !formData.validTo) {
      toast.warning('Please fill in all required fields');
       return;
@@ -89,7 +89,7 @@ const ManageCoupons = () => {
 
     try {
      const token = sessionStorage.getItem('token');
-
+     
      const couponData = {
       hotelId: hotelId,
        code: formData.code,
@@ -98,9 +98,9 @@ const ManageCoupons = () => {
        validTo: formData.validTo,
      maxUses: formData.maxUses ? parseInt(formData.maxUses) : null
      };
-
+     
     console.log('Sending coupon data:', couponData);
-
+    
     if (editingCoupon) {
      await axios.put(
       `/api/coupons/${editingCoupon._id || editingCoupon.id}`,
@@ -120,7 +120,7 @@ const ManageCoupons = () => {
     );
      toast.success('Coupon created successfully!');
     }
-
+    
     setShowForm(false);
      setEditingCoupon(null);
     setFormData({
@@ -181,7 +181,7 @@ const ManageCoupons = () => {
        <h1>Manage Coupons</h1>
         <p>Create and manage discount coupons for your hotels</p>
       </div>
-      <button
+      <button 
        className="btn btn-outline-secondary"
         onClick={() => navigate('/hotel-dashboard')}
       style={{ height: 'fit-content' }}
@@ -359,3 +359,4 @@ const ManageCoupons = () => {
 };
 
 export default ManageCoupons;
+

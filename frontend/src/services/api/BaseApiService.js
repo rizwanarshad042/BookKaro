@@ -1,5 +1,3 @@
-import { mockRequest } from '../../data/mockData';
-
 class BaseApiService {
  constructor(baseURL = '/api') {
   this.baseURL = baseURL;
@@ -10,38 +8,79 @@ class BaseApiService {
     const headers = {
      'Content-Type': 'application/json'
    };
-
+    
    if (token) {
     headers['Authorization'] = `Bearer ${token}`;
    }
-
+    
    return headers;
   }
 
  async handleResponse(response) {
    const data = await response.json();
-
+    
    if (!response.ok) {
     throw new Error(data.message || `HTTP error! status: ${response.status}`);
    }
-
+    
    return data;
   }
 
  async get(endpoint, params = {}) {
-   return mockRequest('GET', `${this.baseURL}${endpoint}`, params);
+   try {
+    const queryString = new URLSearchParams(params).toString();
+     const url = `${this.baseURL}${endpoint}${queryString ? `?${queryString}` : ''}`;
+    
+    const response = await fetch(url, {
+     method: 'GET',
+      headers: this.getHeaders()
+    });
+    
+    return await this.handleResponse(response);
+   } catch (error) {
+    throw new Error(`GET request failed: ${error.message}`);
+   }
   }
 
  async post(endpoint, data = {}) {
-   return mockRequest('POST', `${this.baseURL}${endpoint}`, data);
+   try {
+    const response = await fetch(`${this.baseURL}${endpoint}`, {
+     method: 'POST',
+      headers: this.getHeaders(),
+     body: JSON.stringify(data)
+    });
+    
+    return await this.handleResponse(response);
+   } catch (error) {
+    throw new Error(`POST request failed: ${error.message}`);
+   }
   }
 
  async put(endpoint, data = {}) {
-   return mockRequest('PUT', `${this.baseURL}${endpoint}`, data);
+   try {
+    const response = await fetch(`${this.baseURL}${endpoint}`, {
+     method: 'PUT',
+      headers: this.getHeaders(),
+     body: JSON.stringify(data)
+    });
+    
+    return await this.handleResponse(response);
+   } catch (error) {
+    throw new Error(`PUT request failed: ${error.message}`);
+   }
   }
 
  async delete(endpoint) {
-   return mockRequest('DELETE', `${this.baseURL}${endpoint}`);
+   try {
+    const response = await fetch(`${this.baseURL}${endpoint}`, {
+     method: 'DELETE',
+      headers: this.getHeaders()
+    });
+    
+    return await this.handleResponse(response);
+   } catch (error) {
+    throw new Error(`DELETE request failed: ${error.message}`);
+   }
   }
 }
 

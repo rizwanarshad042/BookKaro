@@ -20,7 +20,7 @@ const ReportsSection = () => {
    const end = new Date();
     const start = new Date();
    start.setDate(start.getDate() - 30);
-
+    
    setEndDate(end.toISOString().split('T')[0]);
     setStartDate(start.toISOString().split('T')[0]);
   }, []);
@@ -36,15 +36,15 @@ const ReportsSection = () => {
      const token = sessionStorage.getItem('token');
       const url = `${API_URL}/admin/reports?type=${reportType}&startDate=${startDate}&endDate=${endDate}`;
      console.log('Fetching report from:', url);
-
+    
     const response = await fetch(url, {
      headers: { 'Authorization': `Bearer ${token}` }
     });
-
+    
    console.log('Response status:', response.status);
     const data = await response.json();
    console.log('Report data received:', data);
-
+    
    if (data.success) {
     setReportData(data.report);
      toast.success('Report generated successfully!');
@@ -68,20 +68,20 @@ const ReportsSection = () => {
 
     const doc = new jsPDF();
    const pageWidth = doc.internal.pageSize.getWidth();
-
+    
    doc.setFillColor(102, 126, 234);
     doc.rect(0, 0, pageWidth, 40, 'F');
-
+   
    doc.setTextColor(255, 255, 255);
     doc.setFontSize(24);
    doc.setFont('helvetica', 'bold');
     doc.text('BookSmart Admin Report', 14, 20);
-
+   
    doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
    doc.text(`Report Type: ${reportType.charAt(0).toUpperCase() + reportType.slice(1)}`, 14, 30);
     doc.text(`Period: ${format(new Date(startDate), 'MMM dd, yyyy')} - ${format(new Date(endDate), 'MMM dd, yyyy')}`, 14, 36);
-
+   
    doc.setTextColor(0, 0, 0);
     let yPosition = 50;
 
@@ -206,7 +206,7 @@ const ReportsSection = () => {
       doc.setFont('helvetica', 'bold');
      doc.text('Top Cities by Hotel Count', 14, yPos);
       yPos += 8;
-
+    
     const tableData = reportData.topCities.map(item => [
      item._id || 'Unknown',
       item.count.toString(),
@@ -393,7 +393,7 @@ const ReportsSection = () => {
        <ResponsiveContainer width="100%" height={350}>
         <LineChart data={reportData.byMonth}>
          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
+          <XAxis 
          dataKey={(item) => `${item._id.month}/${item._id.year}`}
           label={{ value: 'Month/Year', position: 'insideBottom', offset: -5 }}
         />
@@ -476,7 +476,7 @@ const ReportsSection = () => {
        <ResponsiveContainer width="100%" height={350}>
         <BarChart data={reportData.customersByMonth} barCategoryGap="60%" barGap={8}>
          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
+          <XAxis 
          dataKey={(item) => `${item._id.month}/${item._id.year}`}
           label={{ value: 'Month/Year', position: 'insideBottom', offset: -5 }}
         />
@@ -521,8 +521,8 @@ const ReportsSection = () => {
     <div className="reports-controls">
      <div className="control-group">
       <label>Report Type</label>
-       <select
-      value={reportType}
+       <select 
+      value={reportType} 
        onChange={(e) => setReportType(e.target.value)}
      className="report-select"
     >
@@ -554,8 +554,8 @@ const ReportsSection = () => {
    </div>
 
     <div className="control-actions">
-     <button
-      onClick={fetchReport}
+     <button 
+      onClick={fetchReport} 
      disabled={loading}
       className="btn-generate"
     >
@@ -656,3 +656,4 @@ const ReportsSection = () => {
 };
 
 export default ReportsSection;
+

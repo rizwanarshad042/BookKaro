@@ -108,7 +108,7 @@ const ReplyToReviews = () => {
             <h1>Reply to Reviews</h1>
             <p>Respond to guest reviews</p>
           </div>
-          <button
+          <button 
             className="btn btn-outline-secondary"
             onClick={() => navigate('/hotel-dashboard')}
             style={{ height: 'fit-content' }}
@@ -221,3 +221,4 @@ const ReplyToReviews = () => {
 };
 
 export default ReplyToReviews;
+

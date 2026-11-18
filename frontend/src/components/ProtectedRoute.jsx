@@ -3,11 +3,11 @@ import { Navigate } from 'react-router-dom';
 const ProtectedRoute = ({ children, requiredRole = null }) => {
  const token = sessionStorage.getItem('token');
   const userData = sessionStorage.getItem('user');
-
+  
  if (!token || !userData) {
    return <Navigate to="/login" replace />;
   }
-
+  
  if (requiredRole) {
    const user = JSON.parse(userData);
     if (requiredRole === 'hotel') {
@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
      return <Navigate to="/" replace />;
     }
   }
-
+  
  return children;
 };
 

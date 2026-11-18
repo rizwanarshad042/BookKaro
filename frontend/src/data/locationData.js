@@ -23,7 +23,7 @@ export const pakistanData = {
  ],
  cities: {
   'PUN': [
-   'Lahore', 'Faisalabad', 'Rawalpindi', 'Multan', 'Gujranwala', 'Sialkot', 'Bahawalpur',
+   'Lahore', 'Faisalabad', 'Rawalpindi', 'Multan', 'Gujranwala', 'Sialkot', 'Bahawalpur', 
     'Sargodha', 'Sheikhupura', 'Jhang', 'Kasur', 'Rahim Yar Khan', 'Gujrat', 'Sahiwal',
    'Okara', 'Wah Cantonment', 'Dera Ghazi Khan', 'Mianwali', 'Chiniot', 'Kamoke'
   ],
@@ -130,3 +130,4 @@ export const reverseGeocode = async (lat, lng) => {
    return null;
  }
 };
+

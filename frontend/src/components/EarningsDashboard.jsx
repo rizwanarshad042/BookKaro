@@ -51,7 +51,7 @@ const EarningsDashboard = () => {
        <h1>Earnings Dashboard</h1>
         <p>Track your income and revenue</p>
       </div>
-      <button
+      <button 
        className="btn btn-outline-secondary"
         onClick={() => navigate('/hotel-dashboard')}
       style={{ height: 'fit-content' }}
@@ -150,3 +150,4 @@ const EarningsDashboard = () => {
 };
 
 export default EarningsDashboard;
+

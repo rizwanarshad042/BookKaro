@@ -147,15 +147,15 @@ const ManageHotelProfile = () => {
 
    const addressString = useMemo(() => {
       const parts = [];
-
+    
      if (formData.streetAddress && formData.streetAddress.trim()) {
         parts.push(formData.streetAddress.trim());
     }
-
+    
       if (formData.society && formData.society.trim()) {
       parts.push(formData.society.trim());
      }
-
+    
     if (selectedCountry === 'PK') {
        if (selectedCity && selectedCity.trim()) {
           parts.push(selectedCity.trim());
@@ -165,7 +165,7 @@ const ManageHotelProfile = () => {
         parts.push(formData.city.trim());
        }
       }
-
+    
      if (selectedCountry === 'PK') {
         if (selectedProvince) {
         const provinceName = pakistanData.provinces.find(p => p.code === selectedProvince)?.name;
@@ -176,16 +176,16 @@ const ManageHotelProfile = () => {
           parts.push(formData.province.trim());
       }
      }
-
+    
     if (selectedCountry) {
        const countryName = countries.find(c => c.code === selectedCountry)?.name;
         if (countryName)       parts.push(countryName);
     }
-
+    
       if (formData.zipCode && formData.zipCode.trim()) {
       parts.push(formData.zipCode.trim());
      }
-
+    
     const result = parts.join(', ');
      if (parts.length >= 2 || (selectedCountry && (selectedCity || formData.city))) {
         return result;
@@ -234,7 +234,7 @@ const ManageHotelProfile = () => {
       const country = hotel.location?.country || '';
     const state = hotel.location?.state || '';
      const city = hotel.location?.city || '';
-
+    
     let countryCode = '';
      if (country.toLowerCase().includes('pakistan')) {
         countryCode = 'PK';
@@ -242,19 +242,19 @@ const ManageHotelProfile = () => {
        const found = countries.find(c => c.name.toLowerCase() === country.toLowerCase());
         countryCode = found?.code || '';
     }
-
+    
       setSelectedCountry(countryCode);
-
+    
      if (countryCode === 'PK' && state) {
-        const province = pakistanData.provinces.find(p =>
-        p.name.toLowerCase() === state.toLowerCase() ||
+        const province = pakistanData.provinces.find(p => 
+        p.name.toLowerCase() === state.toLowerCase() || 
          p.code.toLowerCase() === state.toLowerCase()
         );
       if (province) {
          setSelectedProvince(province.code);
         }
     }
-
+    
       setFormData({
       name: hotel.name || '',
        description: hotel.description || '',
@@ -339,10 +339,10 @@ const ManageHotelProfile = () => {
         }
          fullAddress = parts.join(', ');
         }
-
+      
        const countryName = countries.find(c => c.code === selectedCountry)?.name || formData.country;
-        const provinceName = selectedCountry === 'PK' && selectedProvince
-        ? pakistanData.provinces.find(p => p.code === selectedProvince)?.name
+        const provinceName = selectedCountry === 'PK' && selectedProvince 
+        ? pakistanData.provinces.find(p => p.code === selectedProvince)?.name 
          : formData.province;
 
       const hotelData = {
@@ -413,7 +413,7 @@ const ManageHotelProfile = () => {
             capacityBathrooms: ''
         });
        }
-
+      
       setEditingHotel(null);
        fetchHotels();
       } catch (error) {
@@ -477,7 +477,7 @@ const ManageHotelProfile = () => {
     try {
        const token = sessionStorage.getItem('token');
         const uploadFormData = new FormData();
-
+      
        const filesToUpload = files.slice(0, 10);
         filesToUpload.forEach((file) => {
         uploadFormData.append('images', file);
@@ -543,7 +543,7 @@ const ManageHotelProfile = () => {
             <h1>Manage Hotel Profile</h1>
              <p>Create, edit, and manage your hotels</p>
             </div>
-          <button
+          <button 
              className="btn btn-outline-secondary"
               onClick={() => navigate('/hotel-dashboard')}
             style={{ height: 'fit-content' }}
@@ -565,7 +565,7 @@ const ManageHotelProfile = () => {
 
           {hotels.length > 0 && hotels.some(h => !h.isApproved && !h.isSuspended) && (
           <div className="alert alert-info mb-4">
-             <strong>ℹ️ Note:</strong> Some of your hotels are pending approval.
+             <strong>ℹ️ Note:</strong> Some of your hotels are pending approval. 
               Hotels must be approved by an administrator before they are visible to customers.
           </div>
          )}
@@ -622,7 +622,7 @@ const ManageHotelProfile = () => {
                            <div className="alert alert-info mt-3 mb-0">
                               <strong>ℹ️ Pending Approval:</strong>
                             <p className="mb-0 mt-1">
-                               Your hotel is currently pending admin approval. It will be visible to customers once approved.
+                               Your hotel is currently pending admin approval. It will be visible to customers once approved. 
                                 Please wait for an administrator to review and approve your hotel listing.
                             </p>
                            </div>
@@ -856,12 +856,12 @@ const ManageHotelProfile = () => {
                       />
                               {validationErrors.zipCode && <div className="invalid-feedback">{validationErrors.zipCode}</div>}
                   </div>
-
+                  
                     {/* Map Location Picker Section */}
                   <div className="mb-4">
                      <h5 className="mb-3">📍 Map Location <span className="text-danger">*</span></h5>
                       <p className="text-muted small mb-3">
-                      The map will automatically update when you fill in the address fields above.
+                      The map will automatically update when you fill in the address fields above. 
                        You can also manually click on the map or drag the marker to adjust the location.
                       </p>
                     <LocationPickerMap
@@ -884,7 +884,7 @@ const ManageHotelProfile = () => {
                        </div>
                       )}
                   </div>
-
+                  
                     <div className="mb-3">
                     <label className="form-label">Total Rooms *</label>
                      <input
@@ -1031,7 +1031,7 @@ const ManageHotelProfile = () => {
                     <div className="mb-4">
                     <label className="form-label">Hotel Images <span className="text-danger">*</span></label>
                      <p className="text-muted small mb-3">
-                        Upload images of your hotel. You can upload up to 10 images at once (max 10MB each).
+                        Upload images of your hotel. You can upload up to 10 images at once (max 10MB each). 
                       You can upload images multiple times to add more images. Images will be stored in Cloudinary.
                      </p>
                       <div className="mb-3">
@@ -1062,7 +1062,7 @@ const ManageHotelProfile = () => {
                       {formData.images.length > 0 && (
                       <div className="mt-3">
                          <p className="small text-muted mb-2">
-                            {formData.images.length} image(s) uploaded. Click X to remove an image.
+                            {formData.images.length} image(s) uploaded. Click X to remove an image. 
                           You can upload more images by selecting files again.
                          </p>
                           <div className="d-flex flex-wrap gap-3">
@@ -1071,10 +1071,10 @@ const ManageHotelProfile = () => {
                                 <img
                                 src={image}
                                  alt={`Hotel ${index + 1}`}
-                                  style={{
-                                  width: '150px',
-                                   height: '150px',
-                                    objectFit: 'cover',
+                                  style={{ 
+                                  width: '150px', 
+                                   height: '150px', 
+                                    objectFit: 'cover', 
                                   borderRadius: '8px',
                                    border: '2px solid #e0e0e0'
                                   }}
@@ -1086,9 +1086,9 @@ const ManageHotelProfile = () => {
                                 <button
                                 type="button"
                                  className="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle"
-                                  style={{
-                                  width: '28px',
-                                   height: '28px',
+                                  style={{ 
+                                  width: '28px', 
+                                   height: '28px', 
                                     padding: '0',
                                   lineHeight: '1',
                                    fontSize: '16px'

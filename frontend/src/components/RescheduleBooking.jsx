@@ -54,7 +54,7 @@ const RescheduleBooking = () => {
 
  const handleSubmit = async (e) => {
    e.preventDefault();
-
+    
    if (!checkIn || !checkOut) {
      toast.warning('Please select both check-in and check-out dates');
       return;
@@ -65,12 +65,12 @@ const RescheduleBooking = () => {
    const checkOutDate = new Date(checkOut);
     checkOutDate.setHours(0, 0, 0, 0);
    const today = getTodayDate();
-
+    
    if (checkInDate >= checkOutDate) {
      toast.warning('Check-out date must be after check-in date');
       return;
     }
-
+    
    if (checkInDate < today) {
      toast.warning('Check-in date cannot be in the past');
       return;
@@ -79,7 +79,7 @@ const RescheduleBooking = () => {
     try {
      setSubmitting(true);
     const token = sessionStorage.getItem('token');
-
+     
      const response = await axios.put(
       `/api/bookings/${bookingId}/reschedule`,
        { checkInDate: checkIn, checkOutDate: checkOut },
@@ -136,7 +136,7 @@ const RescheduleBooking = () => {
         <div className="card">
          <div className="card-body">
           <h5 className="mb-4">Select New Dates</h5>
-
+           
           <div className="mb-3">
            <label className="form-label">New Check-in Date</label>
             <input
@@ -203,3 +203,4 @@ const RescheduleBooking = () => {
 };
 
 export default RescheduleBooking;
+

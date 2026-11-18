@@ -1,19 +1,17 @@
-import { getMockFavorites, getMockHotels, saveMockFavorites } from '../../data/mockData';
+import BaseApiService from './BaseApiService';
 
-const findHotel = (hotelId) => getMockHotels().find((hotel) => String(hotel.id || hotel._id) === String(hotelId));
+class UserApiService extends BaseApiService {
+ async getFavorites() {
+  return this.get('/users/favorites');
+ }
 
-const UserApiService = {
-  async getFavorites() {
-    return { success: true, favorites: getMockFavorites().map(findHotel).filter(Boolean) };
-  },
   async addFavorite(hotelId) {
-    saveMockFavorites([...new Set([...getMockFavorites(), hotelId])]);
-    return { success: true };
-  },
-  async removeFavorite(hotelId) {
-    saveMockFavorites(getMockFavorites().filter((id) => String(id) !== String(hotelId)));
-    return { success: true };
+   return this.post('/users/favorites', { hotelId });
   }
-};
 
-export default UserApiService;
+ async removeFavorite(hotelId) {
+  return this.delete(`/users/favorites/${hotelId}`);
+ }
+}
+
+export default new UserApiService();

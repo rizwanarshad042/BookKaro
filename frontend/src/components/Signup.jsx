@@ -93,7 +93,7 @@ const Signup = () => {
      ...prev,
     [name]: value
    }));
-
+    
    if (errors[name]) {
      setErrors(prev => ({
       ...prev,
@@ -111,9 +111,9 @@ const Signup = () => {
 
  const handleSubmit = async (e) => {
    e.preventDefault();
-
+    
    setErrors({});
-
+    
    if (!validateForm()) {
      return;
     }
@@ -134,7 +134,7 @@ const Signup = () => {
       password: formData.password || '',
        role: formData.role || 'customer'
      };
-
+     
     if (formData.phone && formData.phone.trim()) {
      requestData.phone = formData.phone.trim();
     }
@@ -149,9 +149,9 @@ const Signup = () => {
      sessionStorage.setItem('token', response.data.token);
       sessionStorage.setItem('user', JSON.stringify(response.data.user));
      window.dispatchEvent(new Event('userStatusChanged'));
-
+      
       toast.success('Account created successfully! Welcome to BookSmart!');
-
+      
      if (response.data.user.role === 'customer') {
       navigate('/');
      } else if (response.data.user.role === 'hotel') {
@@ -166,9 +166,9 @@ const Signup = () => {
     console.error('Signup error:', error);
      console.error('Error response:', error.response?.data);
     console.error('Error status:', error.response?.status);
-
+     
     let errorMessage = 'Signup failed. Please try again.';
-
+     
     if (error.response?.data?.message) {
      errorMessage = error.response.data.message;
     } else if (error.response?.data?.error) {
@@ -176,7 +176,7 @@ const Signup = () => {
     } else if (error.message) {
      errorMessage = error.message;
     }
-
+     
     toast.error(errorMessage);
      console.log('Setting error message:', errorMessage);
     setErrors({
@@ -196,7 +196,7 @@ const Signup = () => {
     <div className="container">
      <div className="row justify-content-center">
       <div className="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-       <div className="card border-0 rounded-4" style={{
+       <div className="card border-0 rounded-4" style={{ 
         background: '#FEFEFE',
          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
        }}>
@@ -214,8 +214,8 @@ const Signup = () => {
            {signupType === 'host' ? 'Become a Host' : 'Create Account'}
           </h2>
            <p className="text-muted small mb-0">
-            {signupType === 'host'
-             ? 'Start your hosting journey with us'
+            {signupType === 'host' 
+             ? 'Start your hosting journey with us' 
               : 'Join our BookSmart community'
             }
            </p>
@@ -237,7 +237,7 @@ const Signup = () => {
             />
             {errors.name && <div className="text-danger small mt-1">{errors.name}</div>}
            </div>
-
+           
            <div className="col-md-6 mb-2">
             <label htmlFor="email" className="form-label fw-semibold" style={{ color: '#222222' }}>Email</label>
              <input
@@ -340,8 +340,8 @@ const Signup = () => {
          </div>
         )}
 
-        <button
-         type="submit"
+        <button 
+         type="submit" 
           className="btn w-100 mb-2 signup-btn"
         style={{
          backgroundColor: '#FF5A5F',
@@ -382,7 +382,7 @@ const Signup = () => {
          Log in
         </Link>
        </p>
-
+       
        {signupType === 'customer' && (
         <p className="text-muted mb-0 small">
          Want to become a host?{' '}
@@ -391,7 +391,7 @@ const Signup = () => {
          </Link>
         </p>
        )}
-
+       
        {signupType === 'host' && (
         <p className="text-muted mb-0 small">
          Want to sign up as a customer?{' '}

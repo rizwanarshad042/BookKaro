@@ -38,7 +38,7 @@ const Login = () => {
      ...prev,
     [name]: value
    }));
-
+    
    if (errors[name]) {
      setErrors(prev => ({
       ...prev,
@@ -49,7 +49,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
    e.preventDefault();
-
+    
    if (!validateForm()) {
      return;
     }
@@ -65,9 +65,9 @@ const Login = () => {
       sessionStorage.setItem('token', response.data.token);
        sessionStorage.setItem('user', JSON.stringify(response.data.user));
       window.dispatchEvent(new Event('userStatusChanged'));
-
+       
        toast.success('Login successful! Welcome back!');
-
+       
       if (response.data.user.role === 'customer') {
        navigate('/');
       } else if (response.data.user.role === 'hotel' || response.data.user.role === 'hotel_owner') {
@@ -89,20 +89,6 @@ const Login = () => {
    }
   };
 
-  const handleRoleDashboard = (role, dashboardPath) => {
-    const user = {
-      id: `demo-${role}`,
-      name: `${role.charAt(0).toUpperCase()}${role.slice(1)} Demo`,
-      email: `${role}@demo.booksmart.local`,
-      role
-    };
-
-    sessionStorage.setItem('token', 'demo-token');
-    sessionStorage.setItem('user', JSON.stringify(user));
-    window.dispatchEvent(new Event('userStatusChanged'));
-    navigate(dashboardPath);
-  };
-
  return (
    <div className="d-flex align-items-center justify-content-center bg-light"
    style={{
@@ -112,7 +98,7 @@ const Login = () => {
     <div className="container">
      <div className="row justify-content-center">
       <div className="col-12 col-sm-10 col-md-6 col-lg-5 col-xl-4">
-       <div className="card border-0 rounded-4" style={{
+       <div className="card border-0 rounded-4" style={{ 
         background: '#FEFEFE',
          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
        }}>
@@ -177,8 +163,8 @@ const Login = () => {
           </div>
          )}
 
-         <button
-          type="submit"
+         <button 
+          type="submit" 
            className="btn w-100 mb-2 login-btn"
          style={{
           backgroundColor: '#FF5A5F',
@@ -212,34 +198,7 @@ const Login = () => {
         </button>
        </form>
 
-       <div className="mt-4 pt-3 border-top">
-        <p className="text-center text-muted small mb-2">Open a demo dashboard</p>
-        <div className="d-grid gap-2">
-         <button
-          type="button"
-          className="btn btn-outline-primary"
-          onClick={() => handleRoleDashboard('customer', '/customer-dashboard')}
-         >
-          Customer Dashboard
-         </button>
-         <button
-          type="button"
-          className="btn btn-outline-success"
-          onClick={() => handleRoleDashboard('hotel', '/hotel-dashboard')}
-         >
-          Hotel Dashboard
-         </button>
-         <button
-          type="button"
-          className="btn btn-outline-dark"
-          onClick={() => handleRoleDashboard('admin', '/admin-dashboard')}
-         >
-          Admin Dashboard
-         </button>
-        </div>
-       </div>
-
-        <div className="text-center mt-2">
+       <div className="text-center mt-2">
         <p className="text-muted mb-0 small">
          Don't have an account?{' '}
           <Link to="/signup" className="fw-semibold" style={{color: '#FF5A5F', textDecoration: 'underline'}}>

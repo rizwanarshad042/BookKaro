@@ -147,6 +147,20 @@ const Navbar = () => {
           >
             Home
           </Link>
+          <Link
+            to="/about"
+            className="nav-link me-2 fw-medium"
+            style={{ fontSize: '14px', color: location.pathname === '/about' ? '#1e5bb8' : '#374151' }}
+          >
+            About Us
+          </Link>
+          <Link
+            to="/contact"
+            className="nav-link me-3 fw-medium"
+            style={{ fontSize: '14px', color: location.pathname === '/contact' ? '#1e5bb8' : '#374151' }}
+          >
+            Contact
+          </Link>
           {user ? (
             <div className="d-flex align-items-center">
               <div className="dropdown me-3">
@@ -284,6 +298,8 @@ const Navbar = () => {
                       <li><Link className="dropdown-item py-2" to="/signup">Sign up</Link></li>
                       <li><hr className="dropdown-divider" /></li>
                       <li><Link className="dropdown-item py-2" to="/">Home</Link></li>
+                      <li><Link className="dropdown-item py-2" to="/about">About Us</Link></li>
+                      <li><Link className="dropdown-item py-2" to="/contact">Contact</Link></li>
                     </ul>
                   </div>
                 </>
@@ -392,6 +408,8 @@ const Navbar = () => {
                     <li><Link className="dropdown-item py-2" to="/signup">Sign up</Link></li>
                     <li><hr className="dropdown-divider" /></li>
                     <li><Link className="dropdown-item py-2" to="/">Home</Link></li>
+                    <li><Link className="dropdown-item py-2" to="/about">About Us</Link></li>
+                    <li><Link className="dropdown-item py-2" to="/contact">Contact</Link></li>
                   </ul>
                 </div>
               </div>

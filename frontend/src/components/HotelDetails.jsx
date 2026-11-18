@@ -62,7 +62,7 @@ const HotelDetails = () => {
       const checkOutDate = new Date(checkOut);
       const minCheckOut = new Date(checkInDate);
       minCheckOut.setDate(minCheckOut.getDate() + 1);
-
+      
       if (checkOutDate <= checkInDate) {
         const year = minCheckOut.getFullYear();
         const month = String(minCheckOut.getMonth() + 1).padStart(2, '0');
@@ -118,7 +118,7 @@ const HotelDetails = () => {
 
   const toggleFavorite = async (e) => {
     if (e) e.stopPropagation();
-
+    
     if (!isLoggedIn) {
       navigate('/login');
       return;
@@ -146,8 +146,8 @@ const HotelDetails = () => {
       }
     } catch (error) {
       console.error('Error toggling favorite:', error);
-      const errorMessage = error && error.response && error.response.data && error.response.data.message
-        ? error.response.data.message
+      const errorMessage = error && error.response && error.response.data && error.response.data.message 
+        ? error.response.data.message 
         : 'Error updating favorite';
       toast.error(errorMessage);
     }
