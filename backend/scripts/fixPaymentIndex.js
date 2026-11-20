@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 require('dotenv').config();
 
-const PaymentModel = require('../models/paymentModel');
+
 
 async function fixPaymentIndex() {
    try {
@@ -28,12 +28,12 @@ async function fixPaymentIndex() {
       }
      }
 
-    // Create sparse unique index on transactionId
+    // Create a unique index for string transaction IDs only
      await collection.createIndex(
         { transactionId: 1 },
-      { unique: true, sparse: true, name: 'transactionId_1' }
+      { unique: true, partialFilterExpression: { transactionId: { $type: 'string' } }, name: 'transactionId_1' }
      );
-      console.log('✅ Created sparse unique index on transactionId');
+      console.log('✅ Created unique index for string transaction IDs');
 
      // Verify the index was created
       const newIndexes = await collection.indexes();
@@ -42,7 +42,7 @@ async function fixPaymentIndex() {
         console.log('✅ Index verification:', {
         name: transactionIdIndex.name,
          unique: transactionIdIndex.unique,
-          sparse: transactionIdIndex.sparse
+          partialFilterExpression: transactionIdIndex.partialFilterExpression
       });
      }
 

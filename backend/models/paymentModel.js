@@ -18,6 +18,6 @@ const PaymentSchema = new Schema({
     originalPaymentId: { type: Schema.Types.ObjectId, ref: 'Payment', default: null }
 }, { timestamps: true });
 
-PaymentSchema.index({ transactionId: 1 }, { unique: true, sparse: true });
+PaymentSchema.index({ transactionId: 1 }, { unique: true, partialFilterExpression: { transactionId: { $type: 'string' } } });
 
 module.exports = mongoose.model('Payment', PaymentSchema);
