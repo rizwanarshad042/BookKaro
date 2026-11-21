@@ -646,6 +646,15 @@ Search
   <span className="visually-hidden">Loading...</span>
  </div>
 </div>
+) : error ? (
+ <div className="no-results-full">
+  <div className="no-results-card text-center" role="alert">
+   <h3 className="mb-2">Could not load hotels</h3>
+   <button type="button" className="btn btn-outline-dark mt-2" onClick={refetch}>
+    Try again
+   </button>
+  </div>
+ </div>
 ) : hotels.length === 0 ? (
  <div className="no-results-full">
   <div className="no-results-card text-center">

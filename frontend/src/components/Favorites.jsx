@@ -1,3 +1,4 @@
+import { resolveAssetUrl } from '../services/urlResolver';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -94,7 +95,7 @@ const Favorites = () => {
          <div className="card">
           {hotel.images && hotel.images.length > 0 && (
            <img
-            src={hotel.images[0]}
+            src={resolveAssetUrl(hotel.images[0]) || "/placeholder.svg"}
              className="card-img-top"
            alt={hotel.name}
             style={{ height: '200px', objectFit: 'cover' }}

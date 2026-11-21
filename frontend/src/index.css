@@ -1,20 +1,20 @@
-/* BookSmart Color Scheme */
+/* Bookkaro Color Scheme */
 :root {
-  --BookSmart-red: #FF385C;
-  --BookSmart-dark-red: #E31C5F;
-  --BookSmart-black: #222222;
-  --BookSmart-gray: #717171;
-  --BookSmart-light-gray: #DDDDDD;
-  --BookSmart-bg-gray: #F7F7F7;
-  --BookSmart-white: #FFFFFF;
-  --BookSmart-green: #00A699;
-  --BookSmart-blue: #0088CC;
+  --Bookkaro-red: #FF385C;
+  --Bookkaro-dark-red: #E31C5F;
+  --Bookkaro-black: #222222;
+  --Bookkaro-gray: #717171;
+  --Bookkaro-light-gray: #DDDDDD;
+  --Bookkaro-bg-gray: #F7F7F7;
+  --Bookkaro-white: #FFFFFF;
+  --Bookkaro-green: #00A699;
+  --Bookkaro-blue: #0088CC;
 }
 
 /* Global Styles */
 body {
   font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  color: var(--BookSmart-black);
+  color: var(--Bookkaro-black);
   /* Light background that contrasts with navbar lavender gradient */
   background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 50%, #e8e8e8 100%);
   background-attachment: fixed;
@@ -39,9 +39,9 @@ svg {
 }
 
 /* Custom Button Styles */
-.btn-BookSmart {
-  background-color: var(--BookSmart-red);
-  border-color: var(--BookSmart-red);
+.btn-Bookkaro {
+  background-color: var(--Bookkaro-red);
+  border-color: var(--Bookkaro-red);
   color: white;
   font-weight: 600;
   border-radius: 8px;
@@ -49,27 +49,27 @@ svg {
   transition: all 0.2s ease;
 }
 
-.btn-BookSmart:hover {
-  background-color: var(--BookSmart-dark-red);
-  border-color: var(--BookSmart-dark-red);
+.btn-Bookkaro:hover {
+  background-color: var(--Bookkaro-dark-red);
+  border-color: var(--Bookkaro-dark-red);
   color: white;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(255, 56, 92, 0.3);
 }
 
-.btn-BookSmart-outline {
+.btn-Bookkaro-outline {
   background-color: transparent;
-  border: 1px solid var(--BookSmart-black);
-  color: var(--BookSmart-black);
+  border: 1px solid var(--Bookkaro-black);
+  color: var(--Bookkaro-black);
   font-weight: 600;
   border-radius: 8px;
   padding: 12px 24px;
   transition: all 0.2s ease;
 }
 
-.btn-BookSmart-outline:hover {
-  background-color: var(--BookSmart-black);
-  border-color: var(--BookSmart-black);
+.btn-Bookkaro-outline:hover {
+  background-color: var(--Bookkaro-black);
+  border-color: var(--Bookkaro-black);
   color: white;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(34, 34, 34, 0.3);
@@ -111,34 +111,34 @@ svg {
 }
 
 /* Card Styles */
-.card-BookSmart {
+.card-Bookkaro {
   border: none;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
 }
 
-.card-BookSmart:hover {
+.card-Bookkaro:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
 
 /* Text Colors */
-.text-BookSmart-red {
-  color: var(--BookSmart-red) !important;
+.text-Bookkaro-red {
+  color: var(--Bookkaro-red) !important;
 }
 
-.text-BookSmart-gray {
-  color: var(--BookSmart-gray) !important;
+.text-Bookkaro-gray {
+  color: var(--Bookkaro-gray) !important;
 }
 
-.text-BookSmart-black {
-  color: var(--BookSmart-black) !important;
+.text-Bookkaro-black {
+  color: var(--Bookkaro-black) !important;
 }
 
 /* Background Colors */
-.bg-BookSmart-light {
-  background-color: var(--BookSmart-bg-gray) !important;
+.bg-Bookkaro-light {
+  background-color: var(--Bookkaro-bg-gray) !important;
 }
 
 /* Custom Spacing */
@@ -230,7 +230,7 @@ svg {
 .search-bar .form-label {
   font-size: 12px;
   font-weight: 600;
-  color: var(--BookSmart-black);
+  color: var(--Bookkaro-black);
   margin-bottom: 4px;
 }
 
@@ -330,7 +330,7 @@ ul.dropdown-menu,
   width: 20px;
   height: 20px;
   border: 2px solid #f3f3f3;
-  border-top: 2px solid var(--BookSmart-red);
+  border-top: 2px solid var(--Bookkaro-red);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -341,19 +341,19 @@ ul.dropdown-menu,
 }
 
 /* Utility Classes */
-.shadow-BookSmart {
+.shadow-Bookkaro {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
-.shadow-BookSmart-lg {
+.shadow-Bookkaro-lg {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
 }
 
-.border-radius-BookSmart {
+.border-radius-Bookkaro {
   border-radius: 12px !important;
 }
 
-.border-radius-BookSmart-lg {
+.border-radius-Bookkaro-lg {
   border-radius: 16px !important;
 }
 
@@ -374,23 +374,23 @@ ul.dropdown-menu,
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--BookSmart-gray);
+  background: var(--Bookkaro-gray);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--BookSmart-black);
+  background: var(--Bookkaro-black);
 }
 
 /* Link Styles */
 a {
-  color: var(--BookSmart-red);
+  color: var(--Bookkaro-red);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--BookSmart-dark-red);
+  color: var(--Bookkaro-dark-red);
 }
 
 /* Button Reset */
@@ -407,6 +407,6 @@ button {
 
 button:focus,
 button:focus-visible {
-  outline: 2px solid var(--BookSmart-red);
+  outline: 2px solid var(--Bookkaro-red);
   outline-offset: 2px;
 }

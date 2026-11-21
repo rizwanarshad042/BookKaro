@@ -1,3 +1,4 @@
+import { resolveAssetUrl } from '../services/urlResolver';
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -1069,7 +1070,7 @@ const ManageHotelProfile = () => {
                           {formData.images.map((image, index) => (
                              <div key={index} className="position-relative">
                                 <img
-                                src={image}
+                                src={resolveAssetUrl(image) || "/placeholder.svg"}
                                  alt={`Hotel ${index + 1}`}
                                   style={{ 
                                   width: '150px', 

@@ -150,7 +150,7 @@ const Signup = () => {
       sessionStorage.setItem('user', JSON.stringify(response.data.user));
      window.dispatchEvent(new Event('userStatusChanged'));
       
-      toast.success('Account created successfully! Welcome to BookSmart!');
+      toast.success('Account created successfully! Welcome to Bookkaro!');
       
      if (response.data.user.role === 'customer') {
       navigate('/');
@@ -204,7 +204,7 @@ const Signup = () => {
          <div className="text-center mb-3">
           <img
            src={brandLogo}
-           alt="BookSmart logo"
+           alt="Bookkaro logo"
            width="64"
            height="64"
            className="mb-2"
@@ -216,7 +216,7 @@ const Signup = () => {
            <p className="text-muted small mb-0">
             {signupType === 'host' 
              ? 'Start your hosting journey with us' 
-              : 'Join our BookSmart community'
+              : 'Join our Bookkaro community'
             }
            </p>
          </div>

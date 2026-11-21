@@ -7,6 +7,11 @@ require("dotenv").config();
 dns.setDefaultResultOrder("ipv4first");
 
 const app = express();
+app.set("json escape", true);
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  next();
+});
 app.use(express.json());
 const allowedOrigins = (process.env.FRONTEND_ORIGINS || 'http://localhost:5173,https://localhost:5173,http://127.0.0.1:5173,https://127.0.0.1:5173')
   .split(',')
@@ -27,8 +32,12 @@ app.use(cors({
       allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+app.use(require('./middleware/sanitizeInput'));
+
 const path = require('path');
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+  setHeaders: (res) => res.setHeader("Content-Security-Policy", "default-src 'none'; sandbox")
+}));
 app.use('/invoices', express.static(path.join(__dirname, 'invoices')));
 
 const authRoutes = require('./routes/authRoutes');

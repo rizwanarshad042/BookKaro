@@ -75,7 +75,7 @@ const ReportsSection = () => {
    doc.setTextColor(255, 255, 255);
     doc.setFontSize(24);
    doc.setFont('helvetica', 'bold');
-    doc.text('BookSmart Admin Report', 14, 20);
+    doc.text('Bookkaro Admin Report', 14, 20);
    
    doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');

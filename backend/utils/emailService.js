@@ -1,3 +1,4 @@
+const escapeHtml = require('./escapeHtml');
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
 const { getAuthenticatedClient } = require('./gmailOAuthService');
@@ -87,7 +88,7 @@ const sendEmail = async (to, subject, html, text = '', options = {}) => {
       const transporter = createTransporter();
     
      const mailOptions = {
-        from: `"BookSmart Booking" <${process.env.EMAIL_USER}>`,
+        from: `"Bookkaro Booking" <${process.env.EMAIL_USER}>`,
       to,
        subject,
         text,
@@ -136,7 +137,9 @@ const emailTemplates = {
       (invoiceFileName && normalizedBaseUrl
          ? `${normalizedBaseUrl}/api/payments/invoice/${booking.id || booking._id}`
           : null);
-    const downloadLink = invoiceDataUri || invoiceUrl;
+    const downloadLink = /^data:application\/pdf;base64,/i.test(invoiceDataUri || '')
+      ? invoiceDataUri
+      : /^https?:\/\//i.test(invoiceUrl || '') ? invoiceUrl : null;
      const downloadCtaLabel = invoiceDataUri ? 'Open Attached Invoice' : 'Download PDF Invoice';
       const currency = 'PKR';
     const formatCurrency = (amount) => `${currency} ${(Number(amount || 0)).toFixed(2)}`;
@@ -171,7 +174,7 @@ const emailTemplates = {
                 <p style="margin: 10px 0 0 0; font-size: 16px;">Your reservation is confirmed</p>
             </div>
              <div class="content">
-                <p>Dear ${customer.name},</p>
+                <p>Dear ${escapeHtml(customer.name)},</p>
               <p style="font-size: 16px; color: #28a745; font-weight: bold;">✅ Your booking has been confirmed and payment has been processed successfully!</p>
                <p>We're excited to host you! Please find your booking confirmation and invoice details below:</p>
               
@@ -179,90 +182,90 @@ const emailTemplates = {
                  <h2>Booking Information</h2>
                   <div class="detail-row">
                   <strong>Booking ID:</strong>
-                   <span>${booking.id || booking._id}</span>
+                   <span>${escapeHtml(booking.id || booking._id)}</span>
                   </div>
                 <div class="detail-row">
                    <strong>Hotel:</strong>
-                    <span>${hotel.name || 'Hotel'}</span>
+                    <span>${escapeHtml(hotel.name || 'Hotel')}</span>
                 </div>
                  <div class="detail-row">
                     <strong>Check-in:</strong>
-                  <span>${checkIn}</span>
+                  <span>${escapeHtml(checkIn)}</span>
                  </div>
                   <div class="detail-row">
                   <strong>Check-out:</strong>
-                   <span>${checkOut}</span>
+                   <span>${escapeHtml(checkOut)}</span>
                   </div>
                 <div class="detail-row">
                    <strong>Nights:</strong>
-                    <span>${nights}</span>
+                    <span>${escapeHtml(nights)}</span>
                 </div>
                  <div class="detail-row">
                     <strong>Guests:</strong>
-                  <span>${booking.guests || 1}</span>
+                  <span>${escapeHtml(booking.guests || 1)}</span>
                  </div>
                 
                 <h3 style="margin-top: 20px;">Price Breakdown</h3>
                  <div class="price-breakdown">
                     <div class="price-item">
-                    <span>Base Price (${nights} nights):</span>
-                     <span>${formatCurrency(booking.priceSnapshot?.basePriceTotal)}</span>
+                    <span>Base Price (${escapeHtml(nights)} nights):</span>
+                     <span>${escapeHtml(formatCurrency(booking.priceSnapshot?.basePriceTotal))}</span>
                     </div>
                   ${booking.priceSnapshot?.cleaningFee ? `
                    <div class="price-item">
                       <span>Cleaning Fee:</span>
-                    <span>${formatCurrency(booking.priceSnapshot.cleaningFee)}</span>
+                    <span>${escapeHtml(formatCurrency(booking.priceSnapshot.cleaningFee))}</span>
                    </div>
                     ` : ''}
                   ${booking.priceSnapshot?.serviceFee ? `
                    <div class="price-item">
                       <span>Service Fee:</span>
-                    <span>${formatCurrency(booking.priceSnapshot.serviceFee)}</span>
+                    <span>${escapeHtml(formatCurrency(booking.priceSnapshot.serviceFee))}</span>
                    </div>
                     ` : ''}
                   ${booking.priceSnapshot?.discounts > 0 ? `
                    <div class="price-item" style="color: #28a745;">
-                      <span>Discount (${booking.priceSnapshot.couponCode || 'Coupon'}):</span>
-                    <span>- ${formatCurrency(booking.priceSnapshot.discounts)}</span>
+                      <span>Discount (${escapeHtml(booking.priceSnapshot.couponCode || 'Coupon')}):</span>
+                    <span>- ${escapeHtml(formatCurrency(booking.priceSnapshot.discounts))}</span>
                    </div>
                     ` : ''}
                   <div class="price-item total">
                      <span>Total:</span>
-                      <span>${formatCurrency(payment.amount)}</span>
+                      <span>${escapeHtml(formatCurrency(payment.amount))}</span>
                   </div>
                  </div>
                 
                 <div class="detail-row" style="margin-top: 15px;">
                    <strong>Payment Method:</strong>
-                    <span>${paymentMethodLabel}</span>
+                    <span>${escapeHtml(paymentMethodLabel)}</span>
                 </div>
                  ${paypalEmail ? `
                   <div class="detail-row">
                   <strong>PayPal Email:</strong>
-                   <span>${paypalEmail}</span>
+                   <span>${escapeHtml(paypalEmail)}</span>
                   </div>
                 ` : ''}
                  <div class="detail-row">
                     <strong>Transaction ID:</strong>
-                  <span>${payment.transactionId || 'N/A'}</span>
+                  <span>${escapeHtml(payment.transactionId || 'N/A')}</span>
                  </div>
                   <div class="detail-row">
                   <strong>Payment Date:</strong>
-                   <span>${new Date(payment.processedAt || Date.now()).toLocaleDateString()}</span>
+                   <span>${escapeHtml(new Date(payment.processedAt || Date.now()).toLocaleDateString())}</span>
                   </div>
               </div>
               
-                <p><strong>Hotel Address:</strong><br>${hotel.location?.address || ''}, ${hotel.location?.city || ''}, ${hotel.location?.country || ''}</p>
+                <p><strong>Hotel Address:</strong><br>${escapeHtml(hotel.location?.address || '')}, ${escapeHtml(hotel.location?.city || '')}, ${escapeHtml(hotel.location?.country || '')}</p>
               
                ${downloadLink ? `
                 <p style="text-align: center; margin: 20px 0;">
-                <a href="${downloadLink}" class="button">${downloadCtaLabel}</a>
+                <a href="${escapeHtml(downloadLink)}" class="button">${escapeHtml(downloadCtaLabel)}</a>
                </p>
                 ` : ''}
               
                <p>We look forward to hosting you!</p>
               
-              <p>Best regards,<br>The BookSmart Team</p>
+              <p>Best regards,<br>The Bookkaro Team</p>
              </div>
               <div class="footer">
               <p>This is an automated email. Please do not reply.</p>
@@ -304,7 +307,7 @@ ${downloadLink ? `${downloadCtaLabel}: ${downloadLink}` : ''}
 We look forward to hosting you!
 
 Best regards,
-The BookSmart Team`
+The Bookkaro Team`
      };
     },
 
@@ -342,43 +345,43 @@ The BookSmart Team`
                 <p style="margin: 10px 0 0 0; font-size: 16px;">Your reservation has been cancelled</p>
             </div>
              <div class="content">
-                <p>Dear ${customer.name},</p>
+                <p>Dear ${escapeHtml(customer.name)},</p>
               <p>We're sorry to inform you that your booking has been cancelled. Please find the cancellation details below:</p>
               
                 <div class="cancellation-details">
                 <h2>Booking Information</h2>
                  <div class="detail-row">
                     <strong>Booking ID:</strong>
-                  <span>${booking.id || booking._id}</span>
+                  <span>${escapeHtml(booking.id || booking._id)}</span>
                  </div>
                   <div class="detail-row">
                   <strong>Hotel:</strong>
-                   <span>${hotel.name || 'Hotel'}</span>
+                   <span>${escapeHtml(hotel.name || 'Hotel')}</span>
                   </div>
                 <div class="detail-row">
                    <strong>Check-in:</strong>
-                    <span>${checkIn}</span>
+                    <span>${escapeHtml(checkIn)}</span>
                 </div>
                  <div class="detail-row">
                     <strong>Check-out:</strong>
-                  <span>${checkOut}</span>
+                  <span>${escapeHtml(checkOut)}</span>
                  </div>
                   <div class="detail-row">
                   <strong>Nights:</strong>
-                   <span>${nights}</span>
+                   <span>${escapeHtml(nights)}</span>
                   </div>
                 <div class="detail-row">
                    <strong>Guests:</strong>
-                    <span>${booking.guests || 1}</span>
+                    <span>${escapeHtml(booking.guests || 1)}</span>
                 </div>
                  <div class="detail-row">
                     <strong>Cancelled On:</strong>
-                  <span>${cancelledAt}</span>
+                  <span>${escapeHtml(cancelledAt)}</span>
                  </div>
                   ${booking.cancellationPolicyApplied ? `
                 <div class="detail-row">
                    <strong>Cancellation Policy:</strong>
-                    <span>${booking.cancellationPolicyApplied}</span>
+                    <span>${escapeHtml(booking.cancellationPolicyApplied)}</span>
                 </div>
                  ` : ''}
                 </div>
@@ -387,20 +390,20 @@ The BookSmart Team`
                 <div class="refund-box">
                 <h3 style="margin-top: 0; color: #155724;">Refund Information</h3>
                  <p>Your refund has been processed:</p>
-                  <div class="refund-amount">${formatCurrency(refundAmount)}</div>
+                  <div class="refund-amount">${escapeHtml(formatCurrency(refundAmount))}</div>
                 <p style="margin-bottom: 0; font-size: 14px; color: #666;">
                    The refund will be processed to your original payment method within 3-5 business days.
                   </p>
               </div>
                ` : ''}
               
-              <p><strong>Hotel Address:</strong><br>${hotel.location?.address || ''}, ${hotel.location?.city || ''}, ${hotel.location?.country || ''}</p>
+              <p><strong>Hotel Address:</strong><br>${escapeHtml(hotel.location?.address || '')}, ${escapeHtml(hotel.location?.city || '')}, ${escapeHtml(hotel.location?.country || '')}</p>
               
                 <p>If you have any questions or would like to make a new booking, please don't hesitate to contact us.</p>
               
                <p>We hope to serve you again in the future.</p>
               
-              <p>Best regards,<br>The BookSmart Team</p>
+              <p>Best regards,<br>The Bookkaro Team</p>
              </div>
               <div class="footer">
               <p>This is an automated email. Please do not reply.</p>
@@ -435,7 +438,7 @@ If you have any questions or would like to make a new booking, please don't hesi
 We hope to serve you again in the future.
 
 Best regards,
-The BookSmart Team`
+The Bookkaro Team`
     };
    },
 
@@ -465,29 +468,29 @@ The BookSmart Team`
                 <p style="margin: 10px 0 0 0; font-size: 16px;">Your hotel listing has been suspended</p>
             </div>
              <div class="content">
-                <p>Dear ${owner.name || 'Hotel Owner'},</p>
+                <p>Dear ${escapeHtml(owner.name || 'Hotel Owner')},</p>
               <p>We regret to inform you that your hotel listing has been suspended by our administration team.</p>
               
                 <div class="suspension-details">
                 <h2>Hotel Information</h2>
                  <div class="detail-row">
                     <strong>Hotel Name:</strong>
-                  <span>${hotel.name || 'Hotel'}</span>
+                  <span>${escapeHtml(hotel.name || 'Hotel')}</span>
                  </div>
                   <div class="detail-row">
                   <strong>Hotel ID:</strong>
-                   <span>${hotel.id || hotel._id}</span>
+                   <span>${escapeHtml(hotel.id || hotel._id)}</span>
                   </div>
                 <div class="detail-row">
                    <strong>Suspension Date:</strong>
-                    <span>${new Date().toLocaleDateString()}</span>
+                    <span>${escapeHtml(new Date().toLocaleDateString())}</span>
                 </div>
                </div>
               
               ${reason ? `
                <div class="reason-box">
                   <h3 style="margin-top: 0; color: #856404;">Reason for Suspension:</h3>
-                <p style="margin: 0; color: #856404; white-space: pre-wrap;">${reason}</p>
+                <p style="margin: 0; color: #856404; white-space: pre-wrap;">${escapeHtml(reason)}</p>
                </div>
                 ` : ''}
               
@@ -503,7 +506,7 @@ The BookSmart Team`
               
                 <p>We appreciate your understanding and cooperation.</p>
               
-               <p>Best regards,<br>The BookSmart Administration Team</p>
+               <p>Best regards,<br>The Bookkaro Administration Team</p>
               </div>
             <div class="footer">
                <p>This is an automated email. Please do not reply.</p>
@@ -535,7 +538,7 @@ If you believe this suspension was made in error, or if you have addressed the i
 We appreciate your understanding and cooperation.
 
 Best regards,
-The BookSmart Administration Team`
+The Bookkaro Administration Team`
      };
     },
 
@@ -565,7 +568,7 @@ The BookSmart Administration Team`
               <p style="margin: 10px 0 0 0; font-size: 16px;">Your hotel listing has been approved</p>
              </div>
               <div class="content">
-              <p>Dear ${owner.name || 'Hotel Owner'},</p>
+              <p>Dear ${escapeHtml(owner.name || 'Hotel Owner')},</p>
                <p>Great news! Your hotel listing has been approved by our administration team and is now live on our platform.</p>
               
               <div class="success-box">
@@ -577,19 +580,19 @@ The BookSmart Administration Team`
                 <h2>Hotel Information</h2>
                  <div class="detail-row">
                     <strong>Hotel Name:</strong>
-                  <span>${hotel.name || 'Hotel'}</span>
+                  <span>${escapeHtml(hotel.name || 'Hotel')}</span>
                  </div>
                   <div class="detail-row">
                   <strong>Hotel ID:</strong>
-                   <span>${hotel.id || hotel._id}</span>
+                   <span>${escapeHtml(hotel.id || hotel._id)}</span>
                   </div>
                 <div class="detail-row">
                    <strong>Approval Date:</strong>
-                    <span>${new Date().toLocaleDateString()}</span>
+                    <span>${escapeHtml(new Date().toLocaleDateString())}</span>
                 </div>
                  <div class="detail-row">
                     <strong>Location:</strong>
-                  <span>${hotel.location?.city || ''}, ${hotel.location?.country || ''}</span>
+                  <span>${escapeHtml(hotel.location?.city || '')}, ${escapeHtml(hotel.location?.country || '')}</span>
                  </div>
                 </div>
               
@@ -603,7 +606,7 @@ The BookSmart Administration Team`
               
               <p>We're excited to have you on our platform and look forward to helping you grow your business!</p>
               
-                <p>Best regards,<br>The BookSmart Administration Team</p>
+                <p>Best regards,<br>The Bookkaro Administration Team</p>
             </div>
              <div class="footer">
                 <p>This is an automated email. Please do not reply.</p>
@@ -635,13 +638,13 @@ What's next?
 We're excited to have you on our platform and look forward to helping you grow your business!
 
 Best regards,
-The BookSmart Administration Team`
+The Bookkaro Administration Team`
       };
   },
 
     userSuspensionEmail: (user, reason = '') => {
     return {
-       subject: `Account Suspended - BookSmart`,
+       subject: `Account Suspended - Bookkaro`,
         html: `
         <!DOCTYPE html>
          <html>
@@ -665,25 +668,25 @@ The BookSmart Administration Team`
                <p style="margin: 10px 0 0 0; font-size: 16px;">Your account has been suspended</p>
               </div>
             <div class="content">
-               <p>Dear ${user.name || 'User'},</p>
+               <p>Dear ${escapeHtml(user.name || 'User')},</p>
                 <p>We regret to inform you that your account has been suspended by our administration team.</p>
               
                <div class="suspension-details">
                   <h2>Account Information</h2>
                 <div class="detail-row">
                    <strong>Account Email:</strong>
-                    <span>${user.email || 'N/A'}</span>
+                    <span>${escapeHtml(user.email || 'N/A')}</span>
                 </div>
                  <div class="detail-row">
                     <strong>Suspension Date:</strong>
-                  <span>${new Date().toLocaleDateString()}</span>
+                  <span>${escapeHtml(new Date().toLocaleDateString())}</span>
                  </div>
                 </div>
               
                ${reason ? `
                 <div class="reason-box">
                 <h3 style="margin-top: 0; color: #856404;">Reason for Suspension:</h3>
-                 <p style="margin: 0; color: #856404; white-space: pre-wrap;">${reason}</p>
+                 <p style="margin: 0; color: #856404; white-space: pre-wrap;">${escapeHtml(reason)}</p>
                 </div>
               ` : ''}
               
@@ -700,7 +703,7 @@ The BookSmart Administration Team`
               
                <p>We appreciate your understanding and cooperation.</p>
               
-              <p>Best regards,<br>The BookSmart Administration Team</p>
+              <p>Best regards,<br>The Bookkaro Administration Team</p>
              </div>
               <div class="footer">
               <p>This is an automated email. Please do not reply.</p>
@@ -732,15 +735,15 @@ If you believe this suspension was made in error, or if you have addressed the i
 We appreciate your understanding and cooperation.
 
 Best regards,
-The BookSmart Administration Team`
+The Bookkaro Administration Team`
     };
    },
 
   accountCreatedEmail: (user, role) => {
      const roleDisplayName = role === 'hotel' ? 'Hotel Owner' : role === 'customer' ? 'Customer' : role.charAt(0).toUpperCase() + role.slice(1);
       const welcomeMessage = role === 'hotel' 
-      ? 'Welcome to BookSmart! We\'re excited to have you as a host. You can now start creating and managing your hotel listings.'
-       : 'Welcome to BookSmart! We\'re excited to have you join our community. Start exploring amazing places to stay!';
+      ? 'Welcome to Bookkaro! We\'re excited to have you as a host. You can now start creating and managing your hotel listings.'
+       : 'Welcome to Bookkaro! We\'re excited to have you join our community. Start exploring amazing places to stay!';
     
     const nextSteps = role === 'hotel'
        ? [
@@ -757,7 +760,7 @@ The BookSmart Administration Team`
         ];
 
       return {
-      subject: `Welcome to BookSmart - Your Account Has Been Created!`,
+      subject: `Welcome to Bookkaro - Your Account Has Been Created!`,
        html: `
           <!DOCTYPE html>
         <html>
@@ -780,38 +783,38 @@ The BookSmart Administration Team`
           <body>
           <div class="container">
              <div class="header">
-                <h1>🎉 Welcome to BookSmart!</h1>
+                <h1>🎉 Welcome to Bookkaro!</h1>
               <p style="margin: 10px 0 0 0; font-size: 16px;">Your account has been successfully created</p>
              </div>
               <div class="content">
-              <p>Dear ${user.name || 'User'},</p>
+              <p>Dear ${escapeHtml(user.name || 'User')},</p>
                <p style="font-size: 16px; color: #28a745; font-weight: bold;">✅ Your account has been successfully created!</p>
-                <p>${welcomeMessage}</p>
+                <p>${escapeHtml(welcomeMessage)}</p>
               
                <div class="account-details">
                   <h2>Account Information</h2>
                 <div class="detail-row">
                    <strong>Name:</strong>
-                    <span>${user.name || 'N/A'}</span>
+                    <span>${escapeHtml(user.name || 'N/A')}</span>
                 </div>
                  <div class="detail-row">
                     <strong>Email:</strong>
-                  <span>${user.email || 'N/A'}</span>
+                  <span>${escapeHtml(user.email || 'N/A')}</span>
                  </div>
                   <div class="detail-row">
                   <strong>Account Type:</strong>
-                   <span>${roleDisplayName}</span>
+                   <span>${escapeHtml(roleDisplayName)}</span>
                   </div>
                 <div class="detail-row">
                    <strong>Account Created:</strong>
-                    <span>${new Date().toLocaleDateString()}</span>
+                    <span>${escapeHtml(new Date().toLocaleDateString())}</span>
                 </div>
                </div>
               
               <div class="next-steps">
                  <h3 style="margin-top: 0; color: #2e7d32;">Next Steps:</h3>
                   <ul>
-                  ${nextSteps.map(step => `<li>${step}</li>`).join('')}
+                  ${nextSteps.map(step => `<li>${escapeHtml(step)}</li>`).join('')}
                  </ul>
                 </div>
               
@@ -819,7 +822,7 @@ The BookSmart Administration Team`
               
               <p>We're thrilled to have you on board!</p>
               
-                <p>Best regards,<br>The BookSmart Team</p>
+                <p>Best regards,<br>The Bookkaro Team</p>
             </div>
              <div class="footer">
                 <p>This is an automated email. Please do not reply.</p>
@@ -828,7 +831,7 @@ The BookSmart Administration Team`
           </body>
         </html>
        `,
-        text: `Welcome to BookSmart!
+        text: `Welcome to Bookkaro!
 
 Dear ${user.name || 'User'},
 
@@ -850,7 +853,7 @@ If you have any questions or need assistance, please don't hesitate to contact o
 We're thrilled to have you on board!
 
 Best regards,
-The BookSmart Team`
+The Bookkaro Team`
      };
     },
 
@@ -890,75 +893,75 @@ The BookSmart Team`
                <p style="margin: 10px 0 0 0; font-size: 16px;">Your reservation dates have been updated</p>
               </div>
             <div class="content">
-               <p>Dear ${customer.name || 'Customer'},</p>
+               <p>Dear ${escapeHtml(customer.name || 'Customer')},</p>
                 <p style="font-size: 16px; color: #FF9800; font-weight: bold;">✅ Your booking has been successfully rescheduled!</p>
               <p>Your booking dates have been updated. Please find the details below:</p>
               
                 <div class="change-box">
                 <h3 style="margin-top: 0; color: #856404;">Date Changes:</h3>
-                 <p style="margin: 5px 0;"><strong>Previous Dates:</strong> <span class="old-dates">${oldCheckInStr} to ${oldCheckOutStr} (${oldNights} ${oldNights === 1 ? 'night' : 'nights'})</span></p>
-                  <p style="margin: 5px 0;"><strong>New Dates:</strong> <span class="new-dates">${newCheckIn} to ${newCheckOut} (${newNights} ${newNights === 1 ? 'night' : 'nights'})</span></p>
+                 <p style="margin: 5px 0;"><strong>Previous Dates:</strong> <span class="old-dates">${escapeHtml(oldCheckInStr)} to ${escapeHtml(oldCheckOutStr)} (${escapeHtml(oldNights)} ${oldNights === 1 ? 'night' : 'nights'})</span></p>
+                  <p style="margin: 5px 0;"><strong>New Dates:</strong> <span class="new-dates">${escapeHtml(newCheckIn)} to ${escapeHtml(newCheckOut)} (${escapeHtml(newNights)} ${newNights === 1 ? 'night' : 'nights'})</span></p>
               </div>
               
                 <div class="reschedule-details">
                 <h2>Updated Booking Information</h2>
                  <div class="detail-row">
                     <strong>Booking ID:</strong>
-                  <span>${booking.id || booking._id}</span>
+                  <span>${escapeHtml(booking.id || booking._id)}</span>
                  </div>
                   <div class="detail-row">
                   <strong>Hotel:</strong>
-                   <span>${hotel.name || 'Hotel'}</span>
+                   <span>${escapeHtml(hotel.name || 'Hotel')}</span>
                   </div>
                 <div class="detail-row">
                    <strong>Check-in:</strong>
-                    <span>${newCheckIn}</span>
+                    <span>${escapeHtml(newCheckIn)}</span>
                 </div>
                  <div class="detail-row">
                     <strong>Check-out:</strong>
-                  <span>${newCheckOut}</span>
+                  <span>${escapeHtml(newCheckOut)}</span>
                  </div>
                   <div class="detail-row">
                   <strong>Nights:</strong>
-                   <span>${newNights} ${newNights === 1 ? 'night' : 'nights'}</span>
+                   <span>${escapeHtml(newNights)} ${newNights === 1 ? 'night' : 'nights'}</span>
                   </div>
                 <div class="detail-row">
                    <strong>Guests:</strong>
-                    <span>${booking.guests || 1} ${booking.guests === 1 ? 'guest' : 'guests'}</span>
+                    <span>${escapeHtml(booking.guests || 1)} ${booking.guests === 1 ? 'guest' : 'guests'}</span>
                 </div>
                 
                   ${booking.priceSnapshot ? `
                 <h3 style="margin-top: 20px;">Updated Price Breakdown</h3>
                  <div class="price-breakdown">
                     <div class="price-item">
-                    <span>Base Price (${newNights} nights):</span>
-                     <span>PKR ${(booking.priceSnapshot.basePriceTotal || 0).toFixed(2)}</span>
+                    <span>Base Price (${escapeHtml(newNights)} nights):</span>
+                     <span>PKR ${escapeHtml((booking.priceSnapshot.basePriceTotal || 0).toFixed(2))}</span>
                     </div>
                   ${booking.priceSnapshot.cleaningFee > 0 ? `
                    <div class="price-item">
                       <span>Cleaning Fee:</span>
-                    <span>PKR ${(booking.priceSnapshot.cleaningFee || 0).toFixed(2)}</span>
+                    <span>PKR ${escapeHtml((booking.priceSnapshot.cleaningFee || 0).toFixed(2))}</span>
                    </div>
                     ` : ''}
                   ${booking.priceSnapshot.serviceFee > 0 ? `
                    <div class="price-item">
                       <span>Service Fee:</span>
-                    <span>PKR ${(booking.priceSnapshot.serviceFee || 0).toFixed(2)}</span>
+                    <span>PKR ${escapeHtml((booking.priceSnapshot.serviceFee || 0).toFixed(2))}</span>
                    </div>
                     ` : ''}
                   <div class="price-item">
                      <span>Subtotal:</span>
-                      <span>PKR ${(booking.priceSnapshot.subtotal || 0).toFixed(2)}</span>
+                      <span>PKR ${escapeHtml((booking.priceSnapshot.subtotal || 0).toFixed(2))}</span>
                   </div>
                    ${booking.priceSnapshot.discounts > 0 ? `
                     <div class="price-item">
                     <span>Discount:</span>
-                     <span>-PKR ${(booking.priceSnapshot.discounts || 0).toFixed(2)}</span>
+                     <span>-PKR ${escapeHtml((booking.priceSnapshot.discounts || 0).toFixed(2))}</span>
                     </div>
                   ` : ''}
                    <div class="price-item" style="font-weight: bold; font-size: 18px; border-top: 2px solid #333; padding-top: 10px; margin-top: 10px;">
                       <span>Total:</span>
-                    <span>PKR ${(booking.priceSnapshot.totalPrice || booking.totalPrice || 0).toFixed(2)}</span>
+                    <span>PKR ${escapeHtml((booking.priceSnapshot.totalPrice || booking.totalPrice || 0).toFixed(2))}</span>
                    </div>
                   </div>
                 ` : `
@@ -969,7 +972,7 @@ The BookSmart Team`
                   `}
               </div>
               
-                <p><strong>Hotel Address:</strong><br>${hotel.location?.address || ''}, ${hotel.location?.city || ''}, ${hotel.location?.country || ''}</p>
+                <p><strong>Hotel Address:</strong><br>${escapeHtml(hotel.location?.address || '')}, ${escapeHtml(hotel.location?.city || '')}, ${escapeHtml(hotel.location?.country || '')}</p>
               
                <p><strong>Important Notes:</strong></p>
                 <ul>
@@ -981,7 +984,7 @@ The BookSmart Team`
               
               <p>We look forward to hosting you on your new dates!</p>
               
-                <p>Best regards,<br>The BookSmart Team</p>
+                <p>Best regards,<br>The Bookkaro Team</p>
             </div>
              <div class="footer">
                 <p>This is an automated email. Please do not reply.</p>
@@ -1019,7 +1022,7 @@ ${booking.invoicePath ? '- A new invoice has been generated with the updated dat
 We look forward to hosting you on your new dates!
 
 Best regards,
-The BookSmart Team`
+The Bookkaro Team`
       };
   }
 };

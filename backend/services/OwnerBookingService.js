@@ -1,3 +1,4 @@
+const escapeHtml = require('../utils/escapeHtml');
 const BaseService = require('./BaseService');
 const BookingRepository = require('../repositories/BookingRepository');
 const HotelRepository = require('../repositories/HotelRepository');
@@ -209,7 +210,7 @@ class OwnerBookingService extends BaseService {
                  <p style="margin: 10px 0 0 0; font-size: 16px;">Your reservation has been confirmed</p>
                 </div>
               <div class="content">
-                 <p>Dear ${customer.name || 'Customer'},</p>
+                 <p>Dear ${escapeHtml(customer.name || 'Customer')},</p>
                   <p style="font-size: 16px; color: #28a745; font-weight: bold;">✅ Your booking has been confirmed by the hotel!</p>
                 <p>We're excited to host you! Please find your booking details below:</p>
                 
@@ -217,39 +218,39 @@ class OwnerBookingService extends BaseService {
                   <h2>Booking Information</h2>
                    <div class="detail-row">
                       <strong>Booking ID:</strong>
-                    <span>${bookingId}</span>
+                    <span>${escapeHtml(bookingId)}</span>
                    </div>
                     <div class="detail-row">
                     <strong>Hotel:</strong>
-                     <span>${hotel.name || 'Hotel'}</span>
+                     <span>${escapeHtml(hotel.name || 'Hotel')}</span>
                     </div>
                   <div class="detail-row">
                      <strong>Check-in:</strong>
-                      <span>${checkIn}</span>
+                      <span>${escapeHtml(checkIn)}</span>
                   </div>
                    <div class="detail-row">
                       <strong>Check-out:</strong>
-                    <span>${checkOut}</span>
+                    <span>${escapeHtml(checkOut)}</span>
                    </div>
                     <div class="detail-row">
                     <strong>Nights:</strong>
-                     <span>${nights} ${nights === 1 ? 'night' : 'nights'}</span>
+                     <span>${escapeHtml(nights)} ${nights === 1 ? 'night' : 'nights'}</span>
                     </div>
                   <div class="detail-row">
                      <strong>Guests:</strong>
-                      <span>${updatedBooking.guests || 1} ${updatedBooking.guests === 1 ? 'guest' : 'guests'}</span>
+                      <span>${escapeHtml(updatedBooking.guests || 1)} ${updatedBooking.guests === 1 ? 'guest' : 'guests'}</span>
                   </div>
                    <div class="detail-row">
                       <strong>Total Price:</strong>
-                    <span>PKR ${updatedBooking.priceSnapshot?.totalPrice || updatedBooking.totalPrice || 0}</span>
+                    <span>PKR ${escapeHtml(updatedBooking.priceSnapshot?.totalPrice || updatedBooking.totalPrice || 0)}</span>
                    </div>
                   </div>
                 
-                 <p><strong>Hotel Address:</strong><br>${hotel.location?.address || ''}, ${hotel.location?.city || ''}, ${hotel.location?.country || ''}</p>
+                 <p><strong>Hotel Address:</strong><br>${escapeHtml(hotel.location?.address || '')}, ${escapeHtml(hotel.location?.city || '')}, ${escapeHtml(hotel.location?.country || '')}</p>
                 
                 <p>We look forward to hosting you!</p>
                 
-                  <p>Best regards,<br>The BookSmart Team</p>
+                  <p>Best regards,<br>The Bookkaro Team</p>
               </div>
                <div class="footer">
                   <p>This is an automated email. Please do not reply.</p>
@@ -278,7 +279,7 @@ Hotel Address: ${hotel.location?.address || ''}, ${hotel.location?.city || ''}, 
 We look forward to hosting you!
 
 Best regards,
-The BookSmart Team`
+The Bookkaro Team`
         };
 
        await sendEmail(

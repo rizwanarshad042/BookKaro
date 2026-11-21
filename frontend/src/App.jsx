@@ -9,7 +9,6 @@ import CustomerDashboard from './components/CustomerDashboard';
 import AdminDashboard from './components/AdminDashboard';
 import HotelDashboard from './components/HotelDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
-import HomePage from './components/HomePage';
 import BrowseHotels from './components/BrowseHotels';
 import HotelDetails from './components/HotelDetails';
 import Favorites from './components/Favorites';
@@ -24,8 +23,6 @@ import ManageCoupons from './components/ManageCoupons';
 import OwnerBookingManagement from './components/OwnerBookingManagement';
 import ReplyToReviews from './components/ReplyToReviews';
 import EarningsDashboard from './components/EarningsDashboard';
-import AboutUs from './components/AboutUs';
-import Contact from './components/Contact';
 import './App.css';
 
 function AppContent() {
@@ -98,10 +95,8 @@ function AppContent() {
         theme="light"
       />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/" element={<BrowseHotels />} />
+        <Route path="/home" element={<BrowseHotels />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
 

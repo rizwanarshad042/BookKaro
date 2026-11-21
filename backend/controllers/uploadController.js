@@ -4,6 +4,14 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+const imageExtensions = new Map([
+  ['image/jpeg', '.jpg'],
+  ['image/jpg', '.jpg'],
+  ['image/png', '.png'],
+  ['image/gif', '.gif'],
+  ['image/webp', '.webp']
+]);
+
 // Check if Cloudinary credentials are configured (must be non-empty strings)
 const hasCloudinaryConfig = process.env.CLOUDINARY_CLOUD_NAME && 
                             process.env.CLOUDINARY_CLOUD_NAME.trim() !== '' &&
@@ -39,7 +47,7 @@ if (hasCloudinaryConfig) {
       storage = new CloudinaryStorage({
       cloudinary: cloudinary,
        params: {
-          folder: 'BookSmart/hotels', // Folder in Cloudinary
+          folder: 'Bookkaro/hotels', // Folder in Cloudinary
         allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
          transformation: [
             { width: 1000, height: 1000, crop: 'limit' }, // Limit image size
@@ -69,7 +77,7 @@ if (!useCloudinary) {
       },
     filename: (req, file, cb) => {
        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+        cb(null, file.fieldname + '-' + uniqueSuffix + imageExtensions.get(file.mimetype));
     }
    });
     console.log('📁 Using local disk storage for image uploads');
@@ -77,14 +85,10 @@ if (!useCloudinary) {
 
 // File filter for images only
 const fileFilter = (req, file, cb) => {
-   const allowedTypes = /jpeg|jpg|png|gif|webp/;
-    const mimetype = allowedTypes.test(file.mimetype);
-  
-   if (mimetype) {
-      return cb(null, true);
-  } else {
-     cb(new Error('Only image files are allowed! (jpeg, jpg, png, gif, webp)'));
-    }
+  if (!imageExtensions.has(file.mimetype)) {
+    return cb(new Error('Only image files are allowed! (jpeg, jpg, png, gif, webp)'));
+  }
+  cb(null, true);
 };
 
 const upload = multer({

@@ -35,6 +35,7 @@ export const resolveAssetUrl = (inputUrl) => {
   if (!normalized || normalized === 'undefined' || normalized === 'null') return '';
 
   if (!isAbsoluteUrl(normalized)) {
+    if (/^[a-z][a-z\d+.-]*:/i.test(normalized) || normalized.startsWith('//') || normalized.includes('\\')) return '';
     if (!normalized.startsWith('/')) {
       normalized = `/uploads/${normalized}`;
     }

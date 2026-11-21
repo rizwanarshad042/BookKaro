@@ -106,7 +106,7 @@ const Login = () => {
          <div className="text-center mb-3">
           <img
            src={brandLogo}
-           alt="BookSmart logo"
+           alt="Bookkaro logo"
            width="64"
            height="64"
            className="mb-2"
